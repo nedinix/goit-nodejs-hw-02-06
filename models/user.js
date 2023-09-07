@@ -20,9 +20,20 @@ const userSchema = new Schema(
 			enum: ["starter", "pro", "business"],
 			default: "starter",
 		},
-		token: String,
+		token: {
+			type: String,
+			default: null,
+		},
 		avatarURL: {
 			type: String,
+		},
+		verify: {
+			type: Boolean,
+			default: false,
+		},
+		verificationToken: {
+			type: String,
+			required: [true, "Verify token is required"],
 		},
 	},
 	{ versionKey: false, timestamps: true }
@@ -34,22 +45,29 @@ const registerSchema = Joi.object({
 	email: Joi.string()
 		.pattern(regexp.email)
 		.required()
-		.messages({ "any.required": "missing required email field" }),
+		.messages({ "any.required": "missing required field email" }),
 	password: Joi.string()
 		.min(6)
 		.required()
-		.messages({ "any.required": "missing required password field" }),
+		.messages({ "any.required": "missing required field password" }),
+});
+
+const emailSchema = Joi.object({
+	email: Joi.string()
+		.pattern(regexp.email)
+		.required()
+		.messages({ "any.required": "missing required field email" }),
 });
 
 const loginSchema = Joi.object({
 	email: Joi.string()
 		.pattern(regexp.email)
 		.required()
-		.messages({ "any.required": "missing required email field" }),
+		.messages({ "any.required": "missing required field email " }),
 	password: Joi.string()
 		.min(6)
 		.required()
-		.messages({ "any.required": "missing required password field" }),
+		.messages({ "any.required": "missing required field password " }),
 });
 
 const subscriptionSchema = Joi.object({
@@ -61,6 +79,7 @@ const subscriptionSchema = Joi.object({
 
 const schemas = {
 	registerSchema,
+	emailSchema,
 	loginSchema,
 	subscriptionSchema,
 };
